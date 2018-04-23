@@ -22,14 +22,6 @@ def combina():
     vetor1 = [0,1]
     return vetor4,vetor2,vetor1
 
-def escreve_arquivo(vetor4,vetor2,vetor1):
-    newFile = open("modelo.tv","w")
-    for i in range(0,len(vetor4)):
-        for j in range(0,len(vetor2)):
-            for k in range(0,len(vetor1)):
-                newFile.write('{0}_{1}_{2}\n'.format(vetor4[i], vetor2[j], vetor1[k]))
-    return
-
 
 def acumulador(vetor4,vetor1):
     #Vetor 4  = entrada d
@@ -48,51 +40,105 @@ def acumulador(vetor4,vetor1):
 
 def modelo(acumulador,vetor4,vetor1):
     #Realizar testes para os bits de entrada do modelo
-    sel0 = vetor1
-    sel1 = vetor1
-    A = vetor4
-    for i in range(0,len(A)):
-        for j in range(0,len(sel0)):
-            for k in range(0,len(sel1)):
-                print(i,'\t',j,'\t',k)
-                if j ==1 and k==1:
-                    #subtrai A de ACC
-                    pass
-                if j == 1 and k==0:
-                    #Copia !A para ACC
-                    pass
-                if j == 0 and k==1:
-                    #Soma A com ACC e grava em ACC
-                    pass
-                if j == 0 and k ==0:
-                    #Copia A para ACC
-                    pass
-    return
+	newFile2 = open("modelo.tv","w")
+	sel0 = vetor1
+	sel1 = vetor1
+	A = vetor4
+	for i in range(0,len(A)):
+	    for j in range(0,len(sel0)):
+	        for k in range(0,len(sel1)):
+	            #print(i,'\t',j,'\t',k)
+	            if j ==1 and k==1:
+	                #subtrai A de ACC
+	                #res = sub_bit(A-ACC)
+	                #chama somador
+	                #S,cout = sum_bit(A+res+sel0)
+	            	#newFile2.write('{0}_{1}_{2}_{3}\n'.format(A[i], sel0[j], sel1[k],S,cout))
+	                pass
+	            if j == 1 and k==0:
+	            	#Copia !A para ACC
+	            	#chama somador
+	            	res = inverte_bits(A[i])
+	            	#S,cout = sum_bit(A+res+sel0)
+	            	#newFile2.write('{0}_{1}_{2}_{3}\n'.format(A[i], sel0[j], sel1[k],S,cout))
+	            	#newFile2.write('{0}_{1}_{2}_{3}\n'.format(A[i], sel0[j], sel1[k],res,cout))
+	            if j == 0 and k==1:
+	                #Soma A com ACC e grava em ACC
+	                #chama somador
+	                #S,cout = sum_bit(A+res+sel0)
+	            	#newFile2.write('{0}_{1}_{2}_{3}\n'.format(A[i], sel0[j], sel1[k],S,cout))
+	                pass
+	            if j == 0 and k ==0:
+	                #Copia A para ACC
+	                #chama somador
+	                #S,cout = sum_bit(A+A+sel0)
+	            	#newFile2.write('{0}_{1}_{2}_{3}\n'.format(A[i], sel0[j], sel1[k],A,cout))
+	                pass
+	return
 
-def inversor(vetor4):
-    print(vetor4)
+
+def inverte_bits(bits):
+	aux = ''
+	for i in bits:
+		if i == str(1):
+			aux =  aux + str(0)
+		else:
+			aux = aux + str(1)
+		
+	return aux
+
+def inversor4(vetor4):
     vetor4_inversor = []
     aux = ''
     for i in range(0,len(vetor4)):
-        for j in vetor4[i]:
-            if j == str(1):
-                aux =  aux + str(0)
-            else:
-                aux = aux + str(1)
-        vetor4_inversor.append(aux)
-        aux = ''
-
-    print(vetor4_inversor)
+    	aux = inverte_bits(vetor4[i])
+    	vetor4_inversor.append(aux)
 
     newFile = open("inversor.tv","w")
     for i in range(0,len(vetor4)):
         newFile.write('{0}_{1}\n'.format(vetor4[i], vetor4_inversor[i]))
 
-    return
+    return	
+	
+def mux4(vetor4_1,vetor4_2,vetor1):
+	newFile3 = open("mux.tv","w")
+	vetor4_aux = []
+	aux = ''
+	aux2= ''
+	for i in range(0,len(vetor4_1)):
+		for j in range(0,len(vetor4_2)):
+			aux = vetor4_1[i] + vetor4_2[j]
+			aux2 = vetor4_2[j]+vetor4_1[i]
+		if aux not in vetor4_aux:
+			vetor4_aux.append(aux)
+			aux = ''
+		if aux2 not in vetor4_aux:
+			vetor4_aux.append(aux2)
+			aux2 = ''
+		else:
+			aux = ''
+			aux2= ''
+			
+	for	i in range(0,len(vetor4_aux)):
+		print(vetor4_aux[i])
+		for j in range(0,len(vetor1)):
+			print(j)
+			if j == 1:
+				print(vetor4_aux[i][:4])
+				newFile3.write('{0}_{1}_{2}_{3}\n'.format(vetor4_aux[i][:4], vetor4_aux[i][4:],vetor1[j], vetor4_aux[i][:4]))
+			else:
+				print(vetor4_aux[i][4:])
+				newFile3.write('{0}_{1}_{2}_{3}\n'.format(vetor4_aux[i][:4], vetor4_aux[i][4:], vetor1[j], vetor4_aux[i][4:]))
+			
+		
+			
+	return
+
 
 def main():
     vetor4, vetor2, vetor1 = combina()
-    inversor(vetor4)
+    #inversor4(vetor4)
+    #mux4(vetor4,vetor4,vetor1)
     #vetor_res = acumulador(vetor4,vetor1)
     #modelo(vetor_res,vetor4,vetor1)
     return
